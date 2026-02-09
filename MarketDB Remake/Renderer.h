@@ -9,15 +9,17 @@ public:
 	void Setup();
 	void Render();
 	void Cleanup();
+
 private:
-	static ID3D11Device* m_pd3dDevice;
-	static ID3D11DeviceContext* m_pd3dDeviceContext;
-	static IDXGISwapChain* m_pSwapChain;
-	static bool m_SwapChainOccluded;
+	ID3D11Device* m_pd3dDevice{ nullptr };
+	ID3D11DeviceContext* m_pd3dDeviceContext{ nullptr };
+	IDXGISwapChain* m_pSwapChain{ nullptr };
+	bool m_SwapChainOccluded{ false };
 	static UINT m_ResizeWidth, m_ResizeHeight;
-	static ID3D11RenderTargetView* m_mainRenderTargetView;
+	ID3D11RenderTargetView* m_mainRenderTargetView{ 0 };
 	WNDCLASSEXW m_wc;
 	HWND m_hwnd;
+
 private:
 	bool CreateDeviceD3D(HWND hWnd);
 	void CleanupDeviceD3D();

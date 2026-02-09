@@ -1,12 +1,7 @@
 #include "Renderer.h"
 
-ID3D11Device* Renderer::m_pd3dDevice = nullptr;
-ID3D11DeviceContext* Renderer::m_pd3dDeviceContext = nullptr;
-IDXGISwapChain* Renderer::m_pSwapChain = nullptr;
-bool Renderer::m_SwapChainOccluded = false;
 UINT Renderer::m_ResizeWidth = 0;
 UINT Renderer::m_ResizeHeight = 0;
-ID3D11RenderTargetView* Renderer::m_mainRenderTargetView = nullptr;
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -106,9 +101,9 @@ void Renderer::Setup()
     float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
 
     // Create application window
-    m_wc = { sizeof(m_wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"ImGui Example", nullptr };
+    m_wc = { sizeof(m_wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"MarketDB", nullptr };
     ::RegisterClassExW(&m_wc);
-    m_hwnd = ::CreateWindowW(m_wc.lpszClassName, L"Dear ImGui DirectX11 Example", WS_OVERLAPPEDWINDOW, 100, 100, (int)(1280 * main_scale), (int)(800 * main_scale), nullptr, nullptr, m_wc.hInstance, nullptr);
+    m_hwnd = ::CreateWindowW(m_wc.lpszClassName, L"MarketDB", WS_OVERLAPPEDWINDOW, 100, 100, (int)(1280 * main_scale), (int)(800 * main_scale), nullptr, nullptr, m_wc.hInstance, nullptr);
 
     // Initialize Direct3D
     if (!CreateDeviceD3D(m_hwnd))
@@ -137,7 +132,6 @@ void Renderer::Setup()
 void Renderer::Render()
 {
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     bool done = false;
     while (!done)
@@ -177,10 +171,67 @@ void Renderer::Render()
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
         ImGui::ShowDemoWindow();
+        
+        ImGui::Begin("Test", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+
+        ImGui::PushStyleVar(ImGuiStyleVar_TabMinWidthBase, 120.0f);
+        if (ImGui::BeginTabBar("##TabBar"))
+        { 
+            if(ImGui::BeginTabItem("Item"))
+            {
+                ImGui::Text("Item I.D.");
+                ImGui::Text("Item Name");
+                ImGui::Text("Isle No.");
+                ImGui::Text("Section I.D.");
+                ImGui::Text("Item Price");
+                ImGui::Text("No. of Items");
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Aisle"))
+            {
+                ImGui::Text("Aisle No.");
+                ImGui::Text("No. of Sections");
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Section"))
+            {
+                ImGui::Text("Section I.D.");
+                ImGui::Text("Section Name");
+                ImGui::Text("Aisle No.");
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Supplier"))
+            {
+                ImGui::Text("Supplier I.D.");
+                ImGui::Text("Item I.D.");
+                ImGui::Text("Item Cost");
+                ImGui::Text("Supplier Name");
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Transaction"))
+            {
+                ImGui::Text("Transaction I.D.");
+                ImGui::Text("Item I.D.");
+                ImGui::Text("Item Price");
+                ImGui::Text("Tax Amount");
+                ImGui::Text("Transaction Total");
+                ImGui::Text("Transaction Date");
+                ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
+        }
+        ImGui::PopStyleVar();
+
+        ImGui::End();
 
         // Rendering
         ImGui::Render();
-        const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
+        const float clear_color_with_alpha[4] = { 0, 0.8f, 0, 1.0f };
         m_pd3dDeviceContext->OMSetRenderTargets(1, &m_mainRenderTargetView, nullptr);
         m_pd3dDeviceContext->ClearRenderTargetView(m_mainRenderTargetView, clear_color_with_alpha);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

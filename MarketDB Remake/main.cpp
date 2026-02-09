@@ -2,7 +2,7 @@
 
 int main()
 {
-    Renderer renderer;
+    Renderer renderer{};
 
     renderer.Setup();
     renderer.Render();
