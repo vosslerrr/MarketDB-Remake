@@ -134,6 +134,14 @@ void Renderer::Render()
 {
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
+    int numCols = 0;
+
+    bool item = false;
+    bool aisle = false;
+    bool section = false;
+    bool supplier = false;
+    bool transaction = false;
+
     char item_itemID[128] = "";
     char item_itemName[128] = "";
     char item_aisleNo[128] = "";
@@ -201,121 +209,216 @@ void Renderer::Render()
         
         ImGui::Begin("Test", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 
-        ImGui::PushStyleVar(ImGuiStyleVar_TabMinWidthBase, 120.0f);
-        if (ImGui::BeginTabBar("##TabBar"))
-        { 
-            if(ImGui::BeginTabItem("Item"))
+        if (ImGui::BeginChild("##inputs", ImVec2(300,0), ImGuiChildFlags_Borders))
+        {
+            if (ImGui::BeginTabBar("##TabBar"))
             {
-                ImGui::Text("Item I.D.");
-                ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##item_itemID", item_itemID, IM_COUNTOF(item_itemID));
+                if (ImGui::BeginTabItem("Item"))
+                {
+                    numCols = 6;
 
-                ImGui::Text("Item Name");
-                ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##item_itemName", item_itemName, IM_COUNTOF(item_itemName));
+                    item = true;
+                    aisle = false;
+                    section = false;
+                    supplier = false;
+                    transaction = false;
 
-                ImGui::Text("Aisle No.");
-                ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##item_aisleNo", item_aisleNo, IM_COUNTOF(item_aisleNo));
+                    ImGui::Text("Item I.D.");
+                    ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##item_itemID", item_itemID, IM_COUNTOF(item_itemID));
 
-                ImGui::Text("Section I.D.");
-                ImGui::SameLine();
-                ImGui::InputText("##item_sectionID", item_sectionID, IM_COUNTOF(item_sectionID));
+                    ImGui::Text("Item Name");
+                    ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##item_itemName", item_itemName, IM_COUNTOF(item_itemName));
 
-                ImGui::Text("Item Price");
-                ImGui::SameLine(); ImGui::Dummy({ 6.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##item_itemPrice", item_itemPrice, IM_COUNTOF(item_itemPrice));
+                    ImGui::Text("Aisle No.");
+                    ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##item_aisleNo", item_aisleNo, IM_COUNTOF(item_aisleNo));
 
-                ImGui::Text("No. of Items");
-                ImGui::SameLine(); 
-                ImGui::InputText("##item_numItems", item_numItems, IM_COUNTOF(item_numItems));
+                    ImGui::Text("Section I.D.");
+                    ImGui::SameLine();
+                    ImGui::InputText("##item_sectionID", item_sectionID, IM_COUNTOF(item_sectionID));
 
-                ImGui::EndTabItem();
+                    ImGui::Text("Item Price");
+                    ImGui::SameLine(); ImGui::Dummy({ 6.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##item_itemPrice", item_itemPrice, IM_COUNTOF(item_itemPrice));
+
+                    ImGui::Text("No. of Items");
+                    ImGui::SameLine();
+                    ImGui::InputText("##item_numItems", item_numItems, IM_COUNTOF(item_numItems));
+
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("Aisle"))
+                {
+                    numCols = 2;
+
+                    item = false;
+                    aisle = true;
+                    section = false;
+                    supplier = false;
+                    transaction = false;
+
+                    ImGui::Text("Aisle No.");
+                    ImGui::SameLine(); ImGui::Dummy({ 34.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##aisle_aisleNo", aisle_aisleNo, IM_COUNTOF(aisle_aisleNo));
+
+                    ImGui::Text("No. of Sections");
+                    ImGui::SameLine();
+                    ImGui::InputText("##aisle_numSections", aisle_numSections, IM_COUNTOF(aisle_numSections));
+
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("Section"))
+                {
+                    numCols = 3;
+
+                    item = false;
+                    aisle = false;
+                    section = true;
+                    supplier = false;
+                    transaction = false;
+
+                    ImGui::Text("Section I.D.");
+                    ImGui::SameLine();
+                    ImGui::InputText("##section_sectionID", section_sectionID, IM_COUNTOF(section_sectionID));
+
+                    ImGui::Text("Section Name");
+                    ImGui::SameLine();
+                    ImGui::InputText("##section_sectionName", section_sectionName, IM_COUNTOF(section_sectionName));
+
+                    ImGui::Text("Aisle No.");
+                    ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##section_aisleNo", section_aisleNo, IM_COUNTOF(section_aisleNo));
+
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("Supplier"))
+                {
+                    numCols = 4;
+
+                    item = false;
+                    aisle = false;
+                    section = false;
+                    supplier = true;
+                    transaction = false;
+
+                    ImGui::Text("Supplier I.D.");
+                    ImGui::SameLine();
+                    ImGui::InputText("##supplier_supplierID", supplier_supplierID, IM_COUNTOF(supplier_supplierID));
+
+                    ImGui::Text("Item I.D.");
+                    ImGui::SameLine(); ImGui::Dummy({ 20.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##supplier_itemID", supplier_itemID, IM_COUNTOF(supplier_itemID));
+
+                    ImGui::Text("Item Cost");
+                    ImGui::SameLine(); ImGui::Dummy({ 20.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##supplier_itemCost", supplier_itemCost, IM_COUNTOF(supplier_itemCost));
+
+                    ImGui::Text("Supplier Name");
+                    ImGui::SameLine();
+                    ImGui::InputText("##supplier_supplierName", supplier_supplierName, IM_COUNTOF(supplier_supplierName));
+
+                    ImGui::EndTabItem();
+                }
+
+                if (ImGui::BeginTabItem("Transaction"))
+                {
+                    numCols = 6;
+
+                    item = false;
+                    aisle = false;
+                    section = false;
+                    supplier = false;
+                    transaction = true;
+
+                    ImGui::Text("Transaction I.D.");
+                    ImGui::SameLine(); ImGui::Dummy({ 7.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##transaction_transactionID", transaction_transactionID, IM_COUNTOF(transaction_transactionID));
+
+                    ImGui::Text("Item I.D.");
+                    ImGui::SameLine(); ImGui::Dummy({ 56.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##transaction_itemID", transaction_itemID, IM_COUNTOF(transaction_itemID));
+
+                    ImGui::Text("Item Price");
+                    ImGui::SameLine(); ImGui::Dummy({ 49.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##transaction_itemPrice", transaction_itemPrice, IM_COUNTOF(transaction_itemPrice));
+
+                    ImGui::Text("Tax Amount");
+                    ImGui::SameLine(); ImGui::Dummy({ 49.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##transaction_taxAmount", transaction_taxAmount, IM_COUNTOF(transaction_taxAmount));
+
+                    ImGui::Text("Transaction Total");
+                    ImGui::SameLine(); ImGui::Dummy({ 0, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##transaction_transactionTotal", transaction_transactionTotal, IM_COUNTOF(transaction_transactionTotal));
+
+                    ImGui::Text("Transaction Date");
+                    ImGui::SameLine(); ImGui::Dummy({ 7.0f, 0 }); ImGui::SameLine();
+                    ImGui::InputText("##transaction_trasactionDate", transaction_trasactionDate, IM_COUNTOF(transaction_trasactionDate));
+
+                    ImGui::EndTabItem();
+                }
+
+                ImGui::EndTabBar();
             }
-
-            if (ImGui::BeginTabItem("Aisle"))
-            {
-                ImGui::Text("Aisle No.");
-                ImGui::SameLine(); ImGui::Dummy({ 34.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##aisle_aisleNo", aisle_aisleNo, IM_COUNTOF(aisle_aisleNo));
-
-                ImGui::Text("No. of Sections");
-                ImGui::SameLine();
-                ImGui::InputText("##aisle_numSections", aisle_numSections, IM_COUNTOF(aisle_numSections));
-
-                ImGui::EndTabItem();
-            }
-
-            if (ImGui::BeginTabItem("Section"))
-            {
-                ImGui::Text("Section I.D.");
-                ImGui::SameLine();
-                ImGui::InputText("##section_sectionID", section_sectionID, IM_COUNTOF(section_sectionID));
-
-                ImGui::Text("Section Name");
-                ImGui::SameLine();
-                ImGui::InputText("##section_sectionName", section_sectionName, IM_COUNTOF(section_sectionName));
-
-                ImGui::Text("Aisle No.");
-                ImGui::SameLine(); ImGui::Dummy({ 13.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##section_aisleNo", section_aisleNo, IM_COUNTOF(section_aisleNo));
-
-                ImGui::EndTabItem();
-            }
-
-            if (ImGui::BeginTabItem("Supplier"))
-            {
-                ImGui::Text("Supplier I.D.");
-                ImGui::SameLine();
-                ImGui::InputText("##supplier_supplierID", supplier_supplierID, IM_COUNTOF(supplier_supplierID));
-
-                ImGui::Text("Item I.D.");
-                ImGui::SameLine(); ImGui::Dummy({ 20.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##supplier_itemID", supplier_itemID, IM_COUNTOF(supplier_itemID));
-
-                ImGui::Text("Item Cost");
-                ImGui::SameLine(); ImGui::Dummy({ 20.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##supplier_itemCost", supplier_itemCost, IM_COUNTOF(supplier_itemCost));
-
-                ImGui::Text("Supplier Name");
-                ImGui::SameLine();
-                ImGui::InputText("##supplier_supplierName", supplier_supplierName, IM_COUNTOF(supplier_supplierName));
-
-                ImGui::EndTabItem();
-            }
-
-            if (ImGui::BeginTabItem("Transaction"))
-            {
-                ImGui::Text("Transaction I.D.");
-                ImGui::SameLine(); ImGui::Dummy({ 7.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##transaction_transactionID", transaction_transactionID, IM_COUNTOF(transaction_transactionID));
-
-                ImGui::Text("Item I.D.");
-                ImGui::SameLine(); ImGui::Dummy({ 56.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##transaction_itemID", transaction_itemID, IM_COUNTOF(transaction_itemID));
-
-                ImGui::Text("Item Price");
-                ImGui::SameLine(); ImGui::Dummy({ 49.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##transaction_itemPrice", transaction_itemPrice, IM_COUNTOF(transaction_itemPrice));
-
-                ImGui::Text("Tax Amount");
-                ImGui::SameLine(); ImGui::Dummy({ 49.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##transaction_taxAmount", transaction_taxAmount, IM_COUNTOF(transaction_taxAmount));
-
-                ImGui::Text("Transaction Total");
-                ImGui::SameLine(); ImGui::Dummy({ 0, 0 }); ImGui::SameLine();
-                ImGui::InputText("##transaction_transactionTotal", transaction_transactionTotal, IM_COUNTOF(transaction_transactionTotal));
-
-                ImGui::Text("Transaction Date");
-                ImGui::SameLine(); ImGui::Dummy({ 7.0f, 0 }); ImGui::SameLine();
-                ImGui::InputText("##transaction_trasactionDate", transaction_trasactionDate, IM_COUNTOF(transaction_trasactionDate));
-
-                ImGui::EndTabItem();
-            }
-
-            ImGui::EndTabBar();
         }
-        ImGui::PopStyleVar();
+        
+        ImGui::EndChild();
+        ImGui::SameLine();
+
+        if (ImGui::BeginTable("##outputs", numCols))
+        {
+            if (item)
+            {
+                ImGui::TableSetupColumn("Item I.D.");
+                ImGui::TableSetupColumn("Item Name");
+                ImGui::TableSetupColumn("Aisle No.");
+                ImGui::TableSetupColumn("Section I.D.");
+                ImGui::TableSetupColumn("Item Price");
+                ImGui::TableSetupColumn("No. of Items");
+                ImGui::TableHeadersRow();
+            }
+
+            if (aisle)
+            {
+                ImGui::TableSetupColumn("Aisle No.");
+                ImGui::TableSetupColumn("No. of Sections");
+                ImGui::TableHeadersRow();
+            }
+
+            if (section)
+            {
+                ImGui::TableSetupColumn("Section I.D.");
+                ImGui::TableSetupColumn("Section Name");
+                ImGui::TableSetupColumn("Aisle No.");
+                ImGui::TableHeadersRow();
+            }
+
+            if (supplier)
+            {
+                ImGui::TableSetupColumn("Supplier I.D.");
+                ImGui::TableSetupColumn("Item I.D.");
+                ImGui::TableSetupColumn("Item Cost");
+                ImGui::TableSetupColumn("Supplier Name");
+                ImGui::TableHeadersRow();
+            }
+
+            if (transaction)
+            {
+                ImGui::TableSetupColumn("Transaction I.D.");
+                ImGui::TableSetupColumn("Item I.D.");
+                ImGui::TableSetupColumn("Item Price");
+                ImGui::TableSetupColumn("Tax Amount");
+                ImGui::TableSetupColumn("Transaction Total");
+                ImGui::TableSetupColumn("Transaction Date");
+                ImGui::TableHeadersRow();
+            }
+
+            ImGui::EndTable();
+        }
 
         ImGui::End();
 
